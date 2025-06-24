@@ -43,7 +43,7 @@ class RPSClient:
     def start_online_mode(self):
         self.root.destroy()
         import subprocess
-        subprocess.Popen(["python", "Gr2_Game-rock-paper-scissors/Gr2_R-P-S/client_online_mode.py"])  # Bạn cần tách logic chơi online nếu muốn tách biệt
+        subprocess.Popen(["python", "client_online_mode.py"])  # Bạn cần tách logic chơi online nếu muốn tách biệt
 # Hàm để hiển thị hướng dẫn trò chơi
     def show_instructions(self):
         messagebox.showinfo("Hướng dẫn", "\u2022 Chọn 'Chơi với máy' để đấu với AI\n\u2022 Chọn 'Chơi với người' để đấu trực tuyến\n\u2022 Nhấn biểu tượng để chọn: Kéo, Búa, Bao\n\u2022 Kết quả và điểm sẽ hiển thị bên dưới")

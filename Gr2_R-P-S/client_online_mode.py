@@ -48,9 +48,9 @@ class RPSServerClient:
         self.buttons_frame = tk.Frame(self.root, bg="#e6f2ff")
         self.buttons_frame.pack(pady=10)
 
-        self.rock_img = ImageTk.PhotoImage(Image.open("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/img/rock.png").resize((80, 80)))
-        self.paper_img = ImageTk.PhotoImage(Image.open("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/img/paper.png").resize((80, 80)))
-        self.scissors_img = ImageTk.PhotoImage(Image.open("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/img/scissors.png").resize((80, 80)))
+        self.rock_img = ImageTk.PhotoImage(Image.open("img/rock.png").resize((80, 80)))
+        self.paper_img = ImageTk.PhotoImage(Image.open("img/paper.png").resize((80, 80)))
+        self.scissors_img = ImageTk.PhotoImage(Image.open("img/scissors.png").resize((80, 80)))
 
 
         tk.Button(self.buttons_frame, image=self.rock_img, command=lambda: self.send_choice("rock"), bg="#e6f2ff", bd=0).grid(row=0, column=0, padx=20)
@@ -81,7 +81,7 @@ class RPSServerClient:
             pygame.mixer.init()
             # Tương tự, sử dụng đường dẫn tuyệt đối cho tệp nhạc
             script_dir = os.path.dirname(__file__)
-            background_music_path = os.path.join(script_dir, "Gr2_Game-rock-paper-scissors/Gr2_R-P-S/music/background.wav")
+            background_music_path = os.path.join(script_dir, "music/background.wav")
             pygame.mixer.music.load(background_music_path)
             pygame.mixer.music.set_volume(0.3 if self.sound_on else 0)
             pygame.mixer.music.play(-1)
@@ -107,7 +107,7 @@ class RPSServerClient:
             pass
             # Hàm để gửi lựa chọn của người chơi tới server
     def send_choice(self, choice):
-        self.play_sound("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/music/click.wav") # click.wav không nằm trong thư mục img
+        self.play_sound("music/click.wav") # click.wav không nằm trong thư mục img
         self.result_text.config(state=tk.NORMAL)
         self.result_text.insert(tk.END, f"You chose: {choice}\n", "info")
         self.result_text.config(state=tk.DISABLED)
@@ -139,14 +139,14 @@ class RPSServerClient:
                 elif result.startswith("[INFO]"):
                     self.result_text.insert(tk.END, f"{result}\n", "info")
                 elif "result: win" in result.lower():
-                    self.play_sound("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/music/win.wav")
+                    self.play_sound("music/win.wav")
                     self.score += 1
                     self.result_text.insert(tk.END, f"{result}\n\n", "win")
                 elif "result: lose" in result.lower():
-                    self.play_sound("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/music/lose.wav")
+                    self.play_sound("music/lose.wav")
                     self.result_text.insert(tk.END, f"{result}\n\n", "lose")
                 elif "result: draw" in result.lower():
-                    self.play_sound("Gr2_Game-rock-paper-scissors/Gr2_R-P-S/music/draw.wav")
+                    self.play_sound("music/draw.wav")
                     self.result_text.insert(tk.END, f"{result}\n\n", "draw")
                 self.score_label.config(text=f"Your Score: {self.score}")
                 self.result_text.config(state=tk.DISABLED)
