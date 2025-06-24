@@ -10,7 +10,7 @@ import client  # Import client.py để gọi lại menu chính
 class RPSEngineAI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Chơi với Máy - Rock-Paper-Scissors")
+        self.root.title("Chơi với Máy - Búa Kéo Bao")
         self.root.geometry("700x600")
         self.root.configure(bg="#e6f2ff")
 
@@ -29,23 +29,22 @@ class RPSEngineAI:
         self.buttons_frame = tk.Frame(self.root, bg="#e6f2ff")
         self.buttons_frame.pack(pady=10)
 
-        self.rock_img = ImageTk.PhotoImage(Image.open("img/rock.png").resize((80, 80)))
-        self.paper_img = ImageTk.PhotoImage(Image.open("img/paper.png").resize((80, 80)))
-        self.scissors_img = ImageTk.PhotoImage(Image.open("img/scissors.png").resize((80, 80)))
+        self.rock_img = ImageTk.PhotoImage(Image.open("Gr2_R-P-S/img/rock.png").resize((80, 80)))
+        self.paper_img = ImageTk.PhotoImage(Image.open("Gr2_R-P-S/img/paper.png").resize((80, 80)))
+        self.scissors_img = ImageTk.PhotoImage(Image.open("Gr2_R-P-S/img/scissors.png").resize((80, 80)))
 
-        tk.Button(self.buttons_frame, image=self.rock_img, command=lambda: self.play("rock"), bg="#e6f2ff", bd=0).grid(row=0, column=0, padx=20)
-        tk.Button(self.buttons_frame, image=self.paper_img, command=lambda: self.play("paper"), bg="#e6f2ff", bd=0).grid(row=0, column=1, padx=20)
-        tk.Button(self.buttons_frame, image=self.scissors_img, command=lambda: self.play("scissors"), bg="#e6f2ff", bd=0).grid(row=0, column=2, padx=20)
+        tk.Button(self.buttons_frame, image=self.rock_img, command=lambda: self.play("búa"), bg="#e6f2ff", bd=0).grid(row=0, column=0, padx=20)
+        tk.Button(self.buttons_frame, image=self.paper_img, command=lambda: self.play("bao"), bg="#e6f2ff", bd=0).grid(row=0, column=1, padx=20)
+        tk.Button(self.buttons_frame, image=self.scissors_img, command=lambda: self.play("kéo"), bg="#e6f2ff", bd=0).grid(row=0, column=2, padx=20)
 
         self.result_text = tk.Text(self.root, height=12, width=80, bg="white", font=("Consolas", 11))
         self.result_text.pack(pady=10)
         self.result_text.config(state=tk.DISABLED)
 
-        self.toggle_sound_button = tk.Button(self.root, text="🔊 Sound: ON", command=self.toggle_sound, bg="#cccccc")
+        self.toggle_sound_button = tk.Button(self.root, text="🔊 Âm thanh: BẬT", command=self.toggle_sound, bg="#cccccc")
         self.toggle_sound_button.pack(pady=5)
 
-        # Thêm nút Quay lại
-        tk.Button(self.root, text="Quay lại", font=("Arial", 14), width=20, command=self.back_to_menu, bg="#ff6666", fg="white").pack(pady=10)
+        tk.Button(self.root, text="🔙 Quay lại", font=("Arial", 14), width=20, command=self.back_to_menu, bg="#ff6666", fg="white").pack(pady=10)
 
     def init_background_music(self):
         try:
@@ -58,7 +57,7 @@ class RPSEngineAI:
 
     def toggle_sound(self):
         self.sound_on = not self.sound_on
-        self.toggle_sound_button.config(text="🔇 Sound: OFF" if not self.sound_on else "🔊 Sound: ON")
+        self.toggle_sound_button.config(text="🔇 Âm thanh: TẮT" if not self.sound_on else "🔊 Âm thanh: BẬT")
         try:
             pygame.mixer.music.set_volume(0.3 if self.sound_on else 0)
         except:
@@ -71,22 +70,22 @@ class RPSEngineAI:
 
     def play(self, player_choice):
         self.play_sound("click.wav")
-        ai_choice = random.choice(["rock", "paper", "scissors"])
+        ai_choice = random.choice(["búa", "bao", "kéo"])
         result = self.determine_winner(player_choice, ai_choice)
 
         self.result_text.config(state=tk.NORMAL)
-        self.result_text.insert(tk.END, f"Bạn chọn: {player_choice} | Máy chọn: {ai_choice} => ", "info")
+        self.result_text.insert(tk.END, f"👤 Bạn chọn: {player_choice.upper()} | 🤖 Máy chọn: {ai_choice.upper()} => ", "info")
 
         if result == "win":
             self.play_sound("win.wav")
-            self.result_text.insert(tk.END, "Thắng\n", "win")
+            self.result_text.insert(tk.END, "🎉 Bạn đã THẮNG!\n", "win")
             self.score += 1
         elif result == "lose":
             self.play_sound("lose.wav")
-            self.result_text.insert(tk.END, "Thua\n", "lose")
+            self.result_text.insert(tk.END, "😢 Bạn đã THUA!\n", "lose")
         else:
             self.play_sound("draw.wav")
-            self.result_text.insert(tk.END, "Hòa\n", "draw")
+            self.result_text.insert(tk.END, "😐 Hòa nhau!\n", "draw")
 
         self.score_label.config(text=f"Điểm của bạn: {self.score}")
         self.result_text.config(state=tk.DISABLED)
@@ -94,14 +93,14 @@ class RPSEngineAI:
     def determine_winner(self, player, ai):
         if player == ai:
             return "draw"
-        rules = {"rock": "scissors", "scissors": "paper", "paper": "rock"}
+        rules = {"búa": "kéo", "kéo": "bao", "bao": "búa"}
         return "win" if rules[player] == ai else "lose"
 
     def back_to_menu(self):
-        pygame.mixer.music.stop()  # Dừng nhạc nền
-        self.root.destroy()  # Đóng cửa sổ hiện tại
-        new_root = tk.Tk()  # Tạo cửa sổ mới
-        app = client.RPSClient(new_root)  # Khởi tạo menu chính
+        pygame.mixer.music.stop()
+        self.root.destroy()
+        new_root = tk.Tk()
+        app = client.RPSClient(new_root)
         new_root.mainloop()
 
 if __name__ == "__main__":

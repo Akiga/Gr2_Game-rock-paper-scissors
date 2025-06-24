@@ -48,9 +48,9 @@ class RPSServerClient:
         self.buttons_frame = tk.Frame(self.root, bg="#e6f2ff")
         self.buttons_frame.pack(pady=10)
 
-        self.rock_img = ImageTk.PhotoImage(Image.open("img/rock.png").resize((80, 80)))
-        self.paper_img = ImageTk.PhotoImage(Image.open("img/paper.png").resize((80, 80)))
-        self.scissors_img = ImageTk.PhotoImage(Image.open("img/scissors.png").resize((80, 80)))
+        self.rock_img = ImageTk.PhotoImage(Image.open("Gr2_R-P-S/img/rock.png").resize((80, 80)))
+        self.paper_img = ImageTk.PhotoImage(Image.open("Gr2_R-P-S/img/paper.png").resize((80, 80)))
+        self.scissors_img = ImageTk.PhotoImage(Image.open("Gr2_R-P-S/img/scissors.png").resize((80, 80)))
 
 
         tk.Button(self.buttons_frame, image=self.rock_img, command=lambda: self.send_choice("rock"), bg="#e6f2ff", bd=0).grid(row=0, column=0, padx=20)
@@ -81,7 +81,7 @@ class RPSServerClient:
             pygame.mixer.init()
             # Tương tự, sử dụng đường dẫn tuyệt đối cho tệp nhạc
             script_dir = os.path.dirname(__file__)
-            background_music_path = os.path.join(script_dir, "music/background.wav")
+            background_music_path = os.path.join(script_dir, "Gr2_R-P-S/music/background.wav")
             pygame.mixer.music.load(background_music_path)
             pygame.mixer.music.set_volume(0.3 if self.sound_on else 0)
             pygame.mixer.music.play(-1)
