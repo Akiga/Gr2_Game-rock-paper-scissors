@@ -18,11 +18,11 @@ def determine_winner(choice1, choice2):
         "paper": "rock"      # Bao thắng Búa
     }
     if choice1 == choice2:
-        return "draw"
+        return "Hòa"
     elif rules[choice1] == choice2:
-        return "win"
+        return "Thắng "
     else:
-        return "lose"
+        return "Thua"
     # Hàm để xử lý logic của một phòng chơi
 def handle_room(room_name):
     while True:
@@ -43,9 +43,9 @@ def handle_room(room_name):
 
                 try:  # Gửi kết quả cho cả hai người chơi
                     # Gửi kết quả cho người chơi 1
-                    p1.send(f"Your choice: {c1}, Opponent: {c2}, Result: {r1}".encode())
+                    p1.send(f"Bạn chọn: {c1}, Đối thủ chọn: {c2}, Kết quả: {r1}".encode())
                     #  Gửi kết quả cho người chơi 2
-                    p2.send(f"Your choice: {c2}, Opponent: {c1}, Result: {r2}".encode())
+                    p2.send(f"Bạn chọn: {c2}, Đối thủ chọn: {c1}, Kết quả: {r2}".encode())
                 except:
                     pass
 
@@ -54,7 +54,7 @@ def handle_room(room_name):
 # Hàm để xử lý kết nối của người chơi                
 def handle_client(conn, addr):
     room_name = None
-    print(f"[+] {addr} connected.")
+    print(f"[+] {addr} Đã kết nối.")
     try:
         while True:
             # Nhận dữ liệu từ client
@@ -66,7 +66,7 @@ def handle_client(conn, addr):
             if data == "LIST":
                 with lock:
                     # Lấy tên tất cả các phòng, nếu không có thì thông báo "(no rooms)"
-                    room_list = "\n".join(rooms.keys()) if rooms else "(no rooms)"
+                    room_list = "\n".join(rooms.keys()) if rooms else "(Không có phòng nào)"
                 # Gửi danh sách phòng về cho client
                 conn.send(f"[ROOMS]\n{room_list}".encode())
     
@@ -81,17 +81,17 @@ def handle_client(conn, addr):
     
                     # Nếu phòng đã đủ 2 người thì từ chối
                     if len(rooms[room_name]) >= 2:
-                        conn.send("[ERROR] Room full.".encode())
+                        conn.send("[LỗI] Phòng đầy.".encode())
                         continue
     
                     # Thêm client vào phòng
                     rooms[room_name].append(conn)
-                    conn.send(f"[INFO] Joined room '{room_name}'. Waiting for opponent...".encode())
+                    conn.send(f"[THÔNG BÁO] Đã tham gia phòng '{room_name}'. Đang chờ đối thủ...".encode())
     
                     # Nếu đủ 2 người, thông báo cho cả 2 người và tạo luồng xử lý game
                     if len(rooms[room_name]) == 2:
                         for c in rooms[room_name]:
-                            c.send(f"[INFO] Opponent joined. You can start playing.".encode())
+                            c.send(f"[THÔNG BÁO] Đối thủ đã tham gia. Bạn có thể bắt đầu chơi.".encode())
                         threading.Thread(target=handle_room, args=(room_name,), daemon=True).start()
     
             # Client rời khỏi phòng
@@ -104,7 +104,7 @@ def handle_client(conn, addr):
                             del choices[room_name][conn]
                         # Thông báo cho người còn lại
                         for c in rooms.get(room_name, []):
-                            c.send(f"[INFO] Opponent left the room.".encode())
+                            c.send(f"[THÔNG BÁO] Đối thủ đã rời phòng.".encode())
                         # Nếu phòng không còn ai thì xóa phòng
                         if len(rooms.get(room_name, [])) == 0:
                             del rooms[room_name]
@@ -140,21 +140,21 @@ def handle_client(conn, addr):
                     if conn in choices.get(room_name, {}):
                         del choices[room_name][conn]
                     for c in rooms.get(room_name, []):
-                        c.send(f"[INFO] Opponent left the room.".encode())
+                        c.send(f"[THÔNG BÁO] Đối thủ đã rời phòng thi.".encode())
                     if len(rooms.get(room_name, [])) == 0:
                         del rooms[room_name]
                         if room_name in choices:
                             del choices[room_name]
         # Đóng kết nối và thông báo ngắt kết nối
         conn.close()
-        print(f"[-] {addr} disconnected.")
+        print(f"[-] {addr} Đã ngắt kết nối.")
     
 # Hàm để xử lý kết nối của người chơi
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((HOST, PORT))
     server.listen()
-    print(f"[STARTED] Server listening on {HOST}:{PORT}")
+    print(f"[BẮT ĐẦU] Máy chủ đang kết nối {HOST}:{PORT}")
 
     while True:
         conn, addr = server.accept()
