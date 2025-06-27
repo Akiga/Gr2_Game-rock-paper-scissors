@@ -18,7 +18,7 @@ PORT = 12345
 class RPSServerClient:
     def __init__(self, root):
         self.root = root
-        self.root.title("Rock-Paper-Scissors - Online")
+        self.root.title("✊✋✌ Búa-Bao-Kéo - Online")
         self.root.geometry("700x600")
         self.root.configure(bg="#e6f2ff")
 
@@ -35,14 +35,14 @@ class RPSServerClient:
             self.client.send(f"JOIN:{self.room_name}".encode())
             threading.Thread(target=self.receive_result, daemon=True).start()
         except:
-            messagebox.showerror("Error", "Không thể kết nối tới server")
+            messagebox.showerror("LỖI", "❌Không thể kết nối tới server")
             self.root.destroy()
     # Hàm để hỏi tên phòng từ người dùng
     def ask_room(self):
-        return tk.simpledialog.askstring("Room Name", "Nhập tên phòng:") or "default"
+        return tk.simpledialog.askstring("Tên phòng", "Nhập tên phòng:") or "default"
     # Hàm để thiết lập giao diện người dùng
     def setup_ui(self):
-        self.score_label = tk.Label(self.root, text=f"Your Score: {self.score}", font=("Arial", 14, "bold"), fg="blue", bg="#e6f2ff")
+        self.score_label = tk.Label(self.root, text=f"🏆 Điểm của bạn: {self.score}", font=("Arial", 14, "bold"), fg="blue", bg="#e6f2ff")
         self.score_label.pack(pady=5)
 
         self.buttons_frame = tk.Frame(self.root, bg="#e6f2ff")
@@ -100,7 +100,7 @@ class RPSServerClient:
     # Hàm để bật/tắt âm thanh
     def toggle_sound(self):
         self.sound_on = not self.sound_on
-        self.toggle_sound_button.config(text="🔇 Sound: OFF" if not self.sound_on else "🔊 Sound: ON")
+        self.toggle_sound_button.config(text="🔇 Âm thanh: TẮT" if not self.sound_on else "🔊 Âm thanh: BẬT")
         try:
             pygame.mixer.music.set_volume(0.3 if self.sound_on else 0)
         except:
@@ -109,7 +109,7 @@ class RPSServerClient:
     def send_choice(self, choice):
         self.play_sound("music/click.wav") # click.wav không nằm trong thư mục img
         self.result_text.config(state=tk.NORMAL)
-        self.result_text.insert(tk.END, f"You chose: {choice}\n", "info")
+        self.result_text.insert(tk.END, f"Bạn chọn: {choice}\n", "info")
         self.result_text.config(state=tk.DISABLED)
         try:
             self.client.send(f"GAME:{choice}".encode())
